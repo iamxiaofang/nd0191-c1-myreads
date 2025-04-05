@@ -9,11 +9,13 @@ function App() {
   const [showSearchPage, setShowSearchpage] = useState(false);
   const [books, setBooks] = useState([]);
 
+  // fetch books and set books state
   async function getBooks() {
     const result = await getAll()
     setBooks(result)
   }
 
+  // get books on page load
   useEffect(() => {
     getBooks()
   }, [])
@@ -21,7 +23,11 @@ function App() {
   return (
     <div className="app">
       {showSearchPage ? (
-        <Search showSearchPage={showSearchPage} setShowSearchpage={setShowSearchpage} onChange={setBooks} />
+        <Search
+          books={books}
+          setShowSearchpage={setShowSearchpage}
+          onChange={getBooks}
+        />
       ) : (
         <div className="list-books">
           <div className="list-books-title">
