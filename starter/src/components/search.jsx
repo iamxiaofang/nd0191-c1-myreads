@@ -5,10 +5,9 @@ import { Book } from "./book";
 export const Search = ({ books, setShowSearchpage, onChange }) => {
   const [searchResults, setSearchResults] = useState([]);
   const handleChange = async (e) => {
-    const result = await search(e.target.value)
-
-    if (Array.isArray(result)) {
-      setSearchResults(result)
+    const apiResponse = await search(e.target.value)
+    if (Array.isArray(apiResponse)) {
+      setSearchResults(apiResponse)
     } else {
       setSearchResults([])
     }
