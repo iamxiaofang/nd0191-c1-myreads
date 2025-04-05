@@ -1,26 +1,41 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { search } from "../BooksAPI"
 import { Book } from "./book";
+import { Link } from 'react-router-dom';
+import { useDebounce } from "../hooks/use-debounce";
 
-export const Search = ({ books, setShowSearchpage, onChange }) => {
+export const Search = ({ books, onChange }) => {
+
+  const [searchText, setSearchText] = useState('')
+  const debouncedSearch = useDebounce(searchText, 800)
+
   const [searchResults, setSearchResults] = useState([]);
+
   const handleChange = async (e) => {
-    const apiResponse = await search(e.target.value)
-    if (Array.isArray(apiResponse)) {
-      setSearchResults(apiResponse)
-    } else {
-      setSearchResults([])
-    }
+    setSearchText(e.target.value);
   }
+
+  useEffect(() => {
+    async function fetchBooks() {
+      if (!debouncedSearch) {
+        setSearchResults([])
+        return
+      }
+
+      const apiResponse = await search(debouncedSearch)
+      if (Array.isArray(apiResponse)) {
+        setSearchResults(apiResponse)
+      } else {
+        setSearchResults([])
+      }
+    }
+    fetchBooks();
+  }, [debouncedSearch])
+
   return (
     <div className="search-books">
       <div className="search-books-bar">
-        <a
-          className="close-search"
-          onClick={() => setShowSearchpage(false)}
-        >
-          Close
-        </a>
+        <Link to="/" className="close-search">Close</Link>
         <div className="search-books-input-wrapper">
           <input onChange={handleChange}
             type="text"

@@ -2,11 +2,11 @@ import "./App.css";
 import { useState, useEffect } from "react";
 
 import { getAll } from "./BooksAPI";
-import { Bookshelf } from "./components/bookshelf";
+import { Home } from "./components/home";
 import { Search } from "./components/search";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
-  const [showSearchPage, setShowSearchpage] = useState(false);
   const [books, setBooks] = useState([]);
 
   // fetch books and set books state
@@ -21,31 +21,14 @@ function App() {
   }, [])
 
   return (
-    <div className="app">
-      {showSearchPage ? (
-        <Search
-          books={books}
-          setShowSearchpage={setShowSearchpage}
-          onChange={getBooks}
-        />
-      ) : (
-        <div className="list-books">
-          <div className="list-books-title">
-            <h1>MyReads</h1>
-          </div>
-          <div className="list-books-content">
-            <div>
-              <Bookshelf onChange={getBooks} title="Currently reading" shelf="currentlyReading" books={books} />
-              <Bookshelf onChange={getBooks} title="Want to Read" shelf="wantToRead" books={books} />
-              <Bookshelf onChange={getBooks} title="Read" shelf="read" books={books} />
-            </div>
-          </div>
-          <div className="open-search">
-            <a onClick={() => setShowSearchpage(!showSearchPage)}>Add a book</a>
-          </div>
-        </div>
-      )}
-    </div>
+    <Router>
+      <div className="app">
+        <Routes>
+          <Route path="/" element={<Home books={books} getBooks={getBooks} />} />
+          <Route path="/search" element={<Search books={books} onChange={getBooks} />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
