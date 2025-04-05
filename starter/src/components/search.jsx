@@ -32,8 +32,15 @@ export const Search = ({ books, setShowSearchpage, onChange }) => {
       <div className="search-books-results">
         <ol className="books-grid">
           {
-            books.map(book => {
-              return <li key={book.id}> <Book onChange={onChange} book={book} /></li>
+            searchResults.map(result => {
+
+              const bookInMyBookshelf = books.find(book => book.id === result.id)
+              const shelf = bookInMyBookshelf ? bookInMyBookshelf.shelf : 'none'
+
+              return <li key={result.id}> <Book onChange={onChange} book={{
+                ...result,
+                shelf,
+              }} /></li>
             })
           }
         </ol>
