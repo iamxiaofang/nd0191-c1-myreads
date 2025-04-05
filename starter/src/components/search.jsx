@@ -2,15 +2,15 @@ import { useState } from "react"
 import { search } from "../BooksAPI"
 import { Book } from "./book";
 
-export const Search = ({ showSearchPage, setShowSearchpage, onChange }) => {
-  const [books, setBooks] = useState([]);
+export const Search = ({ books, setShowSearchpage, onChange }) => {
+  const [searchResults, setSearchResults] = useState([]);
   const handleChange = async (e) => {
     const result = await search(e.target.value)
 
     if (Array.isArray(result)) {
-      setBooks(result)
+      setSearchResults(result)
     } else {
-      setBooks([])
+      setSearchResults([])
     }
   }
   return (
@@ -18,7 +18,7 @@ export const Search = ({ showSearchPage, setShowSearchpage, onChange }) => {
       <div className="search-books-bar">
         <a
           className="close-search"
-          onClick={() => setShowSearchpage(!showSearchPage)}
+          onClick={() => setShowSearchpage(false)}
         >
           Close
         </a>
